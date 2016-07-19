@@ -8,6 +8,8 @@ import android.widget.EditText;
 
 import org.hamcrest.Matcher;
 
+import ru.alexey.embeddablekeyboard.EmbeddableKeyboardEditText;
+
 /**
  * Created by Alexey_Pushkarev1 on 07/19/2016.
  */
@@ -31,7 +33,7 @@ public class ReplaceSelectedTextAction implements ViewAction {
 
     @Override
     public void perform(UiController uiController, View view) {
-        EditText editText = ((EditText) view);
-        editText.getText().replace(editText.getSelectionStart(), editText.getSelectionEnd(), replaceText);
+        EmbeddableKeyboardEditText editText = ((EmbeddableKeyboardEditText) view);
+        editText. getText().replace(editText.getSelectionStart(), editText.getSelectionEnd(), replaceText);
     }
 }

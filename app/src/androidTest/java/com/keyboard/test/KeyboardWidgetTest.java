@@ -54,7 +54,7 @@ public class KeyboardWidgetTest {
                     .perform(clearText())
                     .perform(typeText("RS106135777EE"))
                     .perform(new CursorPositionAction(2, 4))
-                    .perform(new DeleteSelectedTextAction())
+                    .perform(new DeleteSelectedTextAction(1))
                     .check(matches(withText("RS6135777EE")));
         } catch (InterruptedException e) {
             e.printStackTrace();

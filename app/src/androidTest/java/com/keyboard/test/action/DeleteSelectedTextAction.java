@@ -8,10 +8,18 @@ import android.widget.EditText;
 
 import org.hamcrest.Matcher;
 
+import ru.alexey.embeddablekeyboard.EmbeddableKeyboardEditText;
+
 /**
  * Created by Alexey_Pushkarev1 on 07/19/2016.
  */
 public class DeleteSelectedTextAction implements ViewAction {
+    private int numberOfPressBackspace;
+
+    public DeleteSelectedTextAction(int numberOfPressBackspace) {
+        this.numberOfPressBackspace = numberOfPressBackspace;
+    }
+
     @Override
     public Matcher<View> getConstraints() {
         return ViewMatchers.isDisplayed();
@@ -24,7 +32,14 @@ public class DeleteSelectedTextAction implements ViewAction {
 
     @Override
     public void perform(UiController uiController, View view) {
-        EditText editText = ((EditText) view);
-        editText.getText().delete(editText.getSelectionStart(), editText.getSelectionEnd());
+        EmbeddableKeyboardEditText editText = ((EmbeddableKeyboardEditText) view);
+        for (int i = 0; i < numberOfPressBackspace; i++) {
+            try {
+                Thread.sleep(200);
+                editText.getInputConnection().onBackspacePressed();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
