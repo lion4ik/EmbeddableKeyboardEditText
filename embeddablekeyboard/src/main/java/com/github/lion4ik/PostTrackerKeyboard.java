@@ -1,4 +1,4 @@
-package ru.alexey.embeddablekeyboard;
+package com.github.lion4ik;
 
 import android.annotation.TargetApi;
 import android.content.Context;

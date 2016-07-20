@@ -1,4 +1,4 @@
-package ru.alexey.embeddablekeyboard;
+package com.github.lion4ik;
 
 /**
  * Created by Alexey_Pushkarev1 on 07/12/2016.

@@ -1,4 +1,4 @@
-package ru.alexey.embeddablekeyboard;
+package com.github.lion4ik;
 
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
 
-import ru.alexey.embeddablekeyboard.EmbeddableKeyboardEditText.InputConnection;
+import com.github.lion4ik.EmbeddableKeyboardEditText.InputConnection;
 
 /**
  * Created by Alexey_Pushkarev1 on 07/12/2016.

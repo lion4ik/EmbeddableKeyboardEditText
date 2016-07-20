@@ -15,7 +15,7 @@
         android:orientation="vertical"
         android:layout_height="wrap_content"
         >
-        <ru.alexey.embeddablekeyboard.EmbeddableKeyboardEditText
+        <com.github.lion4ik.EmbeddableKeyboardEditText
             android:id="@+id/target"
             app:availableSymbols="0123456789RESVCL"
             android:layout_width="match_parent"
@@ -27,13 +27,13 @@
             android:layout_height="wrap_content" />
     </LinearLayout>
 
-    <ru.alexey.embeddablekeyboard.PostTrackerKeyboard
+    <com.github.lion4ik.PostTrackerKeyboard
         android:id="@+id/keyboard"
         android:layout_below="@+id/container"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         >
 
-    </ru.alexey.embeddablekeyboard.PostTrackerKeyboard>
+    </com.github.lion4ik.PostTrackerKeyboard>
 
 </RelativeLayout>

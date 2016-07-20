@@ -19,8 +19,9 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.widget.EditText;
 
-import ru.alexey.embeddablekeyboard.EmbeddableKeyboardEditText;
-import ru.alexey.embeddablekeyboard.KeyboardFrame;
+import com.github.lion4ik.EmbeddableKeyboardEditText;
+import com.github.lion4ik.KeyboardFrame;
+
 
 public class KeyboardWidgetTutorialActivity extends Activity {
 
