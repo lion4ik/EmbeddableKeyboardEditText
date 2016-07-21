@@ -33,6 +33,6 @@ public class ReplaceSelectedTextAction implements ViewAction {
     @Override
     public void perform(UiController uiController, View view) {
         EmbeddableKeyboardEditText editText = ((EmbeddableKeyboardEditText) view);
-        editText. getText().replace(editText.getSelectionStart(), editText.getSelectionEnd(), replaceText);
+        editText.getText().replace(editText.getSelectionStart(), editText.getSelectionEnd(), replaceText);
     }
 }
