@@ -32,9 +32,9 @@ public class KeyboardWidgetTutorialActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		setContentView(R.layout.activity_main);
-		mTargetView = (EmbeddableKeyboardEditText) findViewById(R.id.target);
-		mTargetView2 = (EditText) findViewById(R.id.target2);
+        setContentView(R.layout.activity_main);
+        mTargetView = (EmbeddableKeyboardEditText) findViewById(R.id.target);
+        mTargetView2 = (EditText) findViewById(R.id.target2);
         KeyboardFrame keyboardFrame = (KeyboardFrame) findViewById(R.id.keyboard);
         keyboardFrame.setInputConnection(mTargetView.getInputConnection());
         mTargetView.registerKeyboard(keyboardFrame);
