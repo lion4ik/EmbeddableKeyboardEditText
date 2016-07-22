@@ -5,7 +5,6 @@ import android.content.Context;
 import android.os.Build;
 import android.support.annotation.LayoutRes;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -87,7 +86,7 @@ public abstract class KeyboardFrame extends FrameLayout implements EmbeddableKey
 
     public abstract int getBackspaceResId();
 
-    public View initKeyboard() {
+    protected View initKeyboard() {
         OnClickListener onClickListener = new OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -124,15 +123,12 @@ public abstract class KeyboardFrame extends FrameLayout implements EmbeddableKey
                 public boolean onTouch(View view, MotionEvent motionEvent) {
                     switch (motionEvent.getAction()){
                         case MotionEvent.ACTION_DOWN:
-                            Log.d("KeyboardFrame","ACTION_DOWN");
                             timer.start();
                             break;
                         case MotionEvent.ACTION_UP:
-                            Log.d("KeyboardFrame","ACTION_UP");
                             timer.cancel();
                             break;
                         case MotionEvent.ACTION_CANCEL:
-                            Log.d("KeyboardFrame","ACTION_CANCEL");
                             timer.cancel();
                             break;
                     }
