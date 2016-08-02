@@ -12,7 +12,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
 
-import ru.alexey.lion4ik.EmbeddableKeyboardEditText.InputConnection;
+import com.github.lion4ik.EmbeddableKeyboardEditText;
+import com.github.lion4ik.EmbeddableKeyboardEditText.InputConnection;
+
 
 /**
  * Created by Alexey_Pushkarev1 on 07/12/2016.
@@ -124,15 +126,12 @@ public abstract class KeyboardFrame extends FrameLayout implements EmbeddableKey
                 public boolean onTouch(View view, MotionEvent motionEvent) {
                     switch (motionEvent.getAction()){
                         case MotionEvent.ACTION_DOWN:
-                            Log.d("KeyboardFrame","ACTION_DOWN");
                             timer.start();
                             break;
                         case MotionEvent.ACTION_UP:
-                            Log.d("KeyboardFrame","ACTION_UP");
                             timer.cancel();
                             break;
                         case MotionEvent.ACTION_CANCEL:
-                            Log.d("KeyboardFrame","ACTION_CANCEL");
                             timer.cancel();
                             break;
                     }

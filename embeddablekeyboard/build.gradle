@@ -29,7 +29,7 @@ dependencies {
 publish {
     groupId = 'com.github.lion4ik'
     artifactId = 'embeddablekeyboardedittext'
-    publishVersion = '0.8.0'
+    publishVersion = '1.0.0'
     desc = 'EmbeddableKeyboardEditText widget allows you to use any view as keyboad instead of system keyboard.'
     licences = ['MIT']
     website = 'https://github.com/lion4ik/EmbeddableKeyboardEditText'
