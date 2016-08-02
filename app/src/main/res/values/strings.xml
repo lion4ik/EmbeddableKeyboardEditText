@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">KeyboardTest</string>
+    <string name="btn_title">Показать/Скрыть клавиатуру</string>
 </resources>

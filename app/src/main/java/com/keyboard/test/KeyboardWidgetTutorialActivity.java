@@ -44,7 +44,7 @@ public class KeyboardWidgetTutorialActivity extends Activity {
             public void onClick(View view) {
                 if(keyboardFrame.isKeyboardShown()){
                     keyboardFrame.hideKeyboard();
-                }else{
+                } else {
                     keyboardFrame.showKeyboard();
                 }
             }
