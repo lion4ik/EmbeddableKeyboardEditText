@@ -1,1 +1,1 @@
-include ':app', ':embeddablekeyboard'
+include ':sample', ':embeddablekeyboard'
