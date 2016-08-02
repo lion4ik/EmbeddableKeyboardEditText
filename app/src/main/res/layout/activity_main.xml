@@ -8,7 +8,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.keyboard.test.MainActivity">
+    >
 
     <LinearLayout android:layout_width="match_parent"
         android:id="@+id/container" android:layout_alignParentTop="true"
@@ -21,19 +21,22 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-        <EditText android:layout_width="match_parent"
-            android:digits="0123456789=+-*/"
-            android:id="@+id/target2"
+        <Button
+            android:id="@+id/btnHideKeyboard"
+            android:layout_gravity="center"
+            android:text="Показать/Скрыть клавиатуру"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
+
     </LinearLayout>
 
-    <com.github.lion4ik.PostTrackerKeyboard
+    <com.keyboard.test.PostTrackerKeyboard
         android:id="@+id/keyboard"
         android:layout_below="@+id/container"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         >
 
-    </com.github.lion4ik.PostTrackerKeyboard>
+    </com.keyboard.test.PostTrackerKeyboard>
 
 </RelativeLayout>

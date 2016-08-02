@@ -17,6 +17,8 @@ package com.keyboard.test;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 
 import com.github.lion4ik.EmbeddableKeyboardEditText;
@@ -26,7 +28,6 @@ import com.github.lion4ik.KeyboardFrame;
 public class KeyboardWidgetTutorialActivity extends Activity {
 
 	private EmbeddableKeyboardEditText mTargetView;
-	private EditText mTargetView2;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -34,9 +35,19 @@ public class KeyboardWidgetTutorialActivity extends Activity {
 
         setContentView(R.layout.activity_main);
         mTargetView = (EmbeddableKeyboardEditText) findViewById(R.id.target);
-        mTargetView2 = (EditText) findViewById(R.id.target2);
-        KeyboardFrame keyboardFrame = (KeyboardFrame) findViewById(R.id.keyboard);
+        Button btnShowHideKeyboard = (Button) findViewById(R.id.btnHideKeyboard);
+        final KeyboardFrame keyboardFrame = (KeyboardFrame) findViewById(R.id.keyboard);
         keyboardFrame.setInputConnection(mTargetView.getInputConnection());
         mTargetView.registerKeyboard(keyboardFrame);
+        btnShowHideKeyboard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(keyboardFrame.isKeyboardShown()){
+                    keyboardFrame.hideKeyboard();
+                }else{
+                    keyboardFrame.showKeyboard();
+                }
+            }
+        });
 	}
 }
