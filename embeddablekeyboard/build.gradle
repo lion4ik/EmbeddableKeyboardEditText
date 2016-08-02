@@ -6,6 +6,8 @@ android {
     compileSdkVersion 24
     buildToolsVersion "24.0.0"
 
+    println "${System.properties['java.home']}"
+
     defaultConfig {
         minSdkVersion 15
         targetSdkVersion 24
