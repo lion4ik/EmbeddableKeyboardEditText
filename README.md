@@ -3,7 +3,7 @@ EmbeddableKeyboardEditText widget allows you to use any view as keyboad instead 
 
 Add dependency to your build.gradle file
 ```groovy
-compile 'com.github.lion4ik:embeddablekeyboardedittext:0.8.0'
+compile 'com.github.lion4ik:embeddablekeyboardedittext:1.0.0'
 ```
 ## How to use
 You should extend KeyboardFrame class and ovveride getLayoutResource() which returns layoutId of your keyboard and ovveride getBackspaceResId() which returns id of your backspace button. 
