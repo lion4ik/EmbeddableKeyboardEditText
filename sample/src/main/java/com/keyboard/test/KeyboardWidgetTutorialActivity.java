@@ -37,8 +37,6 @@ public class KeyboardWidgetTutorialActivity extends Activity {
         mTargetView = (EmbeddableKeyboardEditText) findViewById(R.id.target);
         Button btnShowHideKeyboard = (Button) findViewById(R.id.btnHideKeyboard);
         final KeyboardFrame keyboardFrame = (KeyboardFrame) findViewById(R.id.keyboard);
-        keyboardFrame.setInputConnection(mTargetView.getInputConnection());
-        mTargetView.registerKeyboard(keyboardFrame);
         btnShowHideKeyboard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

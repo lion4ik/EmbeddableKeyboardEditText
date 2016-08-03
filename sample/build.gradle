@@ -1,13 +1,13 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 24
-    buildToolsVersion "24.0.0"
+    compileSdkVersion project.targetVersion
+    buildToolsVersion project.buildToolsVersion
 
     defaultConfig {
         applicationId "com.keyboard.test"
-        minSdkVersion 15
-        targetSdkVersion 24
+        minSdkVersion project.minVersion
+        targetSdkVersion project.targetVersion
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -24,16 +24,13 @@ dependencies {
     compile project(':embeddablekeyboard')
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:24.0.0'
-    testCompile 'com.android.support:support-annotations:24.0.0'
-    androidTestCompile 'com.android.support:support-annotations:24.0.0'
+    compile "com.android.support:appcompat-v7:${project.supportLibVersion}"
+    testCompile "com.android.support:support-annotations:${project.supportLibVersion}"
+    androidTestCompile "com.android.support:support-annotations:${project.supportLibVersion}"
 
-    def espressoVersion = '2.2.2'
-    def testRunnerVersion = '0.5'
+    androidTestCompile "com.android.support.test:runner:${project.testRunnerVersion}"
+    androidTestCompile "com.android.support.test:rules:${project.testRunnerVersion}"
 
-    androidTestCompile "com.android.support.test:runner:${testRunnerVersion}"
-    androidTestCompile "com.android.support.test:rules:${testRunnerVersion}"
-
-    androidTestCompile "com.android.support.test.espresso:espresso-core:${espressoVersion}"
+    androidTestCompile "com.android.support.test.espresso:espresso-core:${project.espressoVersion}"
 
 }

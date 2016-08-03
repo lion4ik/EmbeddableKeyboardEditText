@@ -17,6 +17,7 @@
         <com.github.lion4ik.EmbeddableKeyboardEditText
             android:id="@+id/target"
             app:availableSymbols="0123456789RESVCL"
+            app:keyboard="@+id/keyboard"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 

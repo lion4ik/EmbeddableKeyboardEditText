@@ -2,12 +2,16 @@ package com.github.lion4ik;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.os.Build;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
@@ -18,27 +22,9 @@ import android.widget.EditText;
 public class EmbeddableKeyboardEditText extends EditText {
     private EmbeddableKeyboard keyboard;
     private InputConnection keyboardConnection;
+    private int keyboardResId;
 
     private void init(final AttributeSet attrs) {
-        if(attrs != null) {
-            TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.EmbeddableKeyboardEditText);
-            String allowedCharacters = a.getString(R.styleable.EmbeddableKeyboardEditText_availableSymbols);
-            a.recycle();
-            setFilters(new InputFilter[]{new CharactersFilter(allowedCharacters)});
-        }
-
-        setInputType(InputType.TYPE_NULL);
-        setTextIsSelectable(true);
-        setFocusableInTouchMode(true);
-
-        setOnLongClickListener(new OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-                setCursorVisible(true);
-                return false;
-            }
-        });
-
         keyboardConnection = new InputConnection() {
             @Override
             public void onKeyPressed(char symbol) {
@@ -72,6 +58,29 @@ public class EmbeddableKeyboardEditText extends EditText {
                 }
             }
         };
+
+        if(attrs != null) {
+            TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.EmbeddableKeyboardEditText);
+            try {
+                String allowedCharacters = a.getString(R.styleable.EmbeddableKeyboardEditText_availableSymbols);
+                keyboardResId = a.getResourceId(R.styleable.EmbeddableKeyboardEditText_keyboard, NO_ID);
+                setFilters(new InputFilter[]{new CharactersFilter(allowedCharacters)});
+            } finally {
+                a.recycle();
+            }
+        }
+
+        setInputType(InputType.TYPE_NULL);
+        setTextIsSelectable(true);
+        setFocusableInTouchMode(true);
+
+        setOnLongClickListener(new OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                setCursorVisible(true);
+                return false;
+            }
+        });
 
         setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
@@ -112,6 +121,35 @@ public class EmbeddableKeyboardEditText extends EditText {
         setInputType(getInputType() | InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
     }
 
+    @Override
+    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+        super.onLayout(changed, left, top, right, bottom);
+        if (keyboardResId != NO_ID) {
+            View keyboardView = getRootView().findViewById(keyboardResId);
+            if (!(keyboardView instanceof KeyboardFrame)) {
+                throw new IllegalArgumentException("view with id " + keyboardResId + "is not parent of KeyboardFrame!");
+            }
+            KeyboardFrame keyboardFrame = (KeyboardFrame) getRootView().findViewById(keyboardResId);
+            keyboardFrame.setInputConnection(keyboardConnection);
+            registerKeyboard(keyboardFrame);
+        }
+    }
+
+    @Override
+    public Parcelable onSaveInstanceState() {
+        final Parcelable superState = super.onSaveInstanceState();
+        SavedState ss = new SavedState(superState);
+        ss.keyboardId = keyboardResId;
+        return ss;
+    }
+
+    @Override
+    public void onRestoreInstanceState(Parcelable state) {
+        SavedState ss = (SavedState) state;
+        super.onRestoreInstanceState(ss.getSuperState());
+        keyboardResId = ss.keyboardId;
+    }
+
     public EmbeddableKeyboardEditText(Context context) {
         super(context);
         init(null);
@@ -146,5 +184,35 @@ public class EmbeddableKeyboardEditText extends EditText {
         void onKeyPressed(char symbol);
 
         void onBackspacePressed();
+    }
+
+    private static class SavedState extends BaseSavedState {
+        int keyboardId;
+
+        SavedState(Parcelable superState) {
+            super(superState);
+        }
+
+        private SavedState(Parcel in) {
+            super(in);
+            keyboardId = in.readInt();
+        }
+
+        @Override
+        public void writeToParcel(Parcel out, int flags) {
+            super.writeToParcel(out, flags);
+            out.writeInt(keyboardId);
+        }
+
+        public static final Parcelable.Creator<SavedState> CREATOR =
+                new Parcelable.Creator<SavedState>() {
+                    public SavedState createFromParcel(Parcel in) {
+                        return new SavedState(in);
+                    }
+
+                    public SavedState[] newArray(int size) {
+                        return new SavedState[size];
+                    }
+                };
     }
 }
