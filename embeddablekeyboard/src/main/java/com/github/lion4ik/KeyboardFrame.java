@@ -13,6 +13,9 @@ import android.widget.FrameLayout;
 
 import com.github.lion4ik.EmbeddableKeyboardEditText.InputConnection;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by Alexey_Pushkarev1 on 07/12/2016.
  */
@@ -87,6 +90,8 @@ public abstract class KeyboardFrame extends FrameLayout implements EmbeddableKey
     public abstract int getBackspaceResId();
 
     protected View initKeyboard() {
+        ArrayList<View> childViewList = (ArrayList<View>) getAllChildren(getKeyboardView());
+
         OnClickListener onClickListener = new OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -96,16 +101,38 @@ public abstract class KeyboardFrame extends FrameLayout implements EmbeddableKey
         };
 
         View backSpaceView = null;
-        ViewGroup viewGroup = (ViewGroup) getKeyboardView();
-        for (int i = 0; i < viewGroup.getChildCount(); i++) {
-            View childView = viewGroup.getChildAt(i);
+        for (int i = 0; i < childViewList.size(); i++) {
+            View childView = childViewList.get(i);
             if (childView.getId() == getBackspaceResId()) {
                 backSpaceView = childView;
-            } else {
+            } else if(childView instanceof Button){
                 childView.setOnClickListener(onClickListener);
             }
         }
         return backSpaceView;
+    }
+
+    private List<View> getAllChildren(View v) {
+
+        ArrayList<View> result = new ArrayList<>();
+
+        if (!(v instanceof ViewGroup)) {
+            result.add(v);
+            return result;
+        }
+
+        ViewGroup viewGroup = (ViewGroup) v;
+        for (int i = 0; i < viewGroup.getChildCount(); i++) {
+
+            View child = viewGroup.getChildAt(i);
+
+            ArrayList<View> viewArrayList = new ArrayList<>();
+            viewArrayList.add(v);
+            viewArrayList.addAll(getAllChildren(child));
+
+            result.addAll(viewArrayList);
+        }
+        return result;
     }
 
     private void init() {

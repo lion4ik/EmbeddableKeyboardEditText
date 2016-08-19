@@ -17,6 +17,7 @@ package com.keyboard.test;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.text.InputFilter;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -37,6 +38,9 @@ public class KeyboardWidgetTutorialActivity extends Activity {
         mTargetView = (EmbeddableKeyboardEditText) findViewById(R.id.target);
         Button btnShowHideKeyboard = (Button) findViewById(R.id.btnHideKeyboard);
         final KeyboardFrame keyboardFrame = (KeyboardFrame) findViewById(R.id.keyboard);
+        InputFilter[] inputFilters = mTargetView.getFilters();
+        inputFilters = new InputFilter[]{inputFilters[0], new InputFilter.LengthFilter(14)};
+        mTargetView.setFilters(inputFilters);
         btnShowHideKeyboard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

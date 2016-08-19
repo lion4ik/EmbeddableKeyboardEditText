@@ -39,7 +39,13 @@ public class EmbeddableKeyboardEditText extends EditText {
                     selection = selectionStart + 1;
                     setText(getText().replace(selectionStart, selectionEnd, insertString));
                 }
-                setSelection(selection);
+
+                int length = getText().length();
+                if (selection > length) {
+                    setSelection(length);
+                } else {
+                    setSelection(selection);
+                }
             }
 
             @Override
@@ -117,8 +123,7 @@ public class EmbeddableKeyboardEditText extends EditText {
                 return true; // Consume touch event
             }
         });
-        // Disable spell check
-        setInputType(getInputType() | InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
+
     }
 
     @Override
