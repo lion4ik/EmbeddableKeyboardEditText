@@ -3,7 +3,7 @@ EmbeddableKeyboardEditText widget allows you to use any view as keyboad instead 
 
 Add dependency to your build.gradle file
 ```groovy
-compile 'com.github.lion4ik:embeddablekeyboardedittext:1.0.0'
+compile 'com.github.lion4ik:embeddablekeyboardedittext:1.1.0'
 ```
 ## How to use
 You should extend KeyboardFrame class and ovveride getLayoutResource() which returns layoutId of your keyboard and ovveride getBackspaceResId() which returns id of your backspace button. 
@@ -61,6 +61,7 @@ Then place EmbeddableKeyboardEditText and your which extends KeyboardFrame on la
         <com.github.lion4ik.EmbeddableKeyboardEditText
             android:id="@+id/target"
             app:availableSymbols="0123456789RESVCL"
+            app:keyboard="@+id/keyboard"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
@@ -73,7 +74,7 @@ Then place EmbeddableKeyboardEditText and your which extends KeyboardFrame on la
 
     </LinearLayout>
 
-    <com.keyboard.test.CalculatorKeyboard
+    <com.keyboard.test.PostTrackerKeyboard
         android:id="@+id/keyboard"
         android:layout_below="@+id/container"
         android:layout_width="wrap_content"
@@ -85,7 +86,7 @@ Then place EmbeddableKeyboardEditText and your which extends KeyboardFrame on la
 </RelativeLayout>
 ```
 
-After that you should connect your keyboard with EmbeddableKeyboardEditText. You need just setInputConnection on keyboard and register this keyboard in EmbeddableKeyboardEditText.
+Also you can connect your keyboard from code instead. You need just setInputConnection on keyboard and register this keyboard in EmbeddableKeyboardEditText.
 You can do it in onCreate of your Activity:
 
 ```java
@@ -117,5 +118,12 @@ public class KeyboardWidgetTutorialActivity extends Activity {
 }
 ```
 
+## Change log
+
+1.1.0
+- keyboard connection in xml layout
+
+1.0.0
+Initial version
 ### License
 MIT
