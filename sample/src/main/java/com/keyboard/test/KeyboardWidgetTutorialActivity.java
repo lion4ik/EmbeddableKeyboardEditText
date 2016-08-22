@@ -16,10 +16,15 @@
 package com.keyboard.test;
 
 import android.app.Activity;
+import android.content.Context;
+import android.hardware.input.InputManager;
 import android.os.Bundle;
 import android.text.InputFilter;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 
 import com.github.lion4ik.EmbeddableKeyboardEditText;
@@ -29,18 +34,21 @@ import com.github.lion4ik.KeyboardFrame;
 public class KeyboardWidgetTutorialActivity extends Activity {
 
 	private EmbeddableKeyboardEditText mTargetView;
+    private InputMethodManager inputManager;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
+        inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         mTargetView = (EmbeddableKeyboardEditText) findViewById(R.id.target);
         Button btnShowHideKeyboard = (Button) findViewById(R.id.btnHideKeyboard);
+        CheckBox checkBoxSystemKeyboard = (CheckBox) findViewById(R.id.cbSystemKeyboard);
+
         final KeyboardFrame keyboardFrame = (KeyboardFrame) findViewById(R.id.keyboard);
-        InputFilter[] inputFilters = mTargetView.getFilters();
-        inputFilters = new InputFilter[]{inputFilters[0], new InputFilter.LengthFilter(14)};
-        mTargetView.setFilters(inputFilters);
+        mTargetView.addFilter(new InputFilter.LengthFilter(14));
+        mTargetView.setUseSystemKeyboard(true);
         btnShowHideKeyboard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -51,5 +59,18 @@ public class KeyboardWidgetTutorialActivity extends Activity {
                 }
             }
         });
-	}
+        checkBoxSystemKeyboard.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                mTargetView.setUseSystemKeyboard(isChecked);
+                if (isChecked) {
+                    keyboardFrame.hideKeyboard();
+                    inputManager.showSoftInput(mTargetView, 0);
+                } else {
+                    keyboardFrame.showKeyboard();
+                    inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+                }
+            }
+        });
+    }
 }

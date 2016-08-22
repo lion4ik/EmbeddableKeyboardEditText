@@ -21,17 +21,24 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
+        <CheckBox
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="@string/checkbox_title"
+            android:id="@+id/cbSystemKeyboard" />
+
         <Button
             android:id="@+id/btnHideKeyboard"
-            android:layout_gravity="center"
             android:text="@string/btn_title"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
     </LinearLayout>
 
     <com.keyboard.test.PostTrackerKeyboard
         android:id="@+id/keyboard"
+        android:visibility="invisible"
         android:layout_below="@+id/container"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

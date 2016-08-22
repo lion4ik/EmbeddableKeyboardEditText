@@ -3,6 +3,7 @@
 
     <declare-styleable name="EmbeddableKeyboardEditText">
         <attr name="availableSymbols" format="string" />
+        <attr name="useSystemKeyboard" format="boolean" />
         <attr name="keyboard" format="reference" />
     </declare-styleable>
 </resources>

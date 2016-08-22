@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">KeyboardTest</string>
     <string name="btn_title">Показать/Скрыть клавиатуру</string>
+    <string name="checkbox_title">Системная клавиатуру</string>
 </resources>

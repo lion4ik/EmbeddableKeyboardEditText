@@ -23,6 +23,12 @@ public class EmbeddableKeyboardEditText extends EditText {
     private EmbeddableKeyboard keyboard;
     private InputConnection keyboardConnection;
     private int keyboardResId;
+    private boolean useSystemKeyboard;
+
+    private OnFocusChangeListener focusChangeListener;
+    private OnLongClickListener longClickListener;
+    private OnClickListener clickListener;
+    private OnTouchListener touchListener;
 
     private void init(final AttributeSet attrs) {
         keyboardConnection = new InputConnection() {
@@ -70,6 +76,7 @@ public class EmbeddableKeyboardEditText extends EditText {
             try {
                 String allowedCharacters = a.getString(R.styleable.EmbeddableKeyboardEditText_availableSymbols);
                 keyboardResId = a.getResourceId(R.styleable.EmbeddableKeyboardEditText_keyboard, NO_ID);
+                useSystemKeyboard = a.getBoolean(R.styleable.EmbeddableKeyboardEditText_useSystemKeyboard, false);
                 setFilters(new InputFilter[]{new CharactersFilter(allowedCharacters)});
             } finally {
                 a.recycle();
@@ -80,15 +87,15 @@ public class EmbeddableKeyboardEditText extends EditText {
         setTextIsSelectable(true);
         setFocusableInTouchMode(true);
 
-        setOnLongClickListener(new OnLongClickListener() {
+        longClickListener = new OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
                 setCursorVisible(true);
                 return false;
             }
-        });
+        };
 
-        setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        focusChangeListener = new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (keyboard != null) {
@@ -99,9 +106,9 @@ public class EmbeddableKeyboardEditText extends EditText {
                     }
                 }
             }
-        });
+        };
 
-        setOnClickListener(new View.OnClickListener() {
+        clickListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 setCursorVisible(true);
@@ -109,9 +116,9 @@ public class EmbeddableKeyboardEditText extends EditText {
                     keyboard.showKeyboard();
                 }
             }
-        });
+        };
         // Disable standard keyboard hard way
-        setOnTouchListener(new View.OnTouchListener() {
+        touchListener = new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 EditText edittext = (EditText) v;
@@ -122,8 +129,45 @@ public class EmbeddableKeyboardEditText extends EditText {
                 edittext.setInputType(inType);              // Restore input type
                 return true; // Consume touch event
             }
-        });
+        };
 
+        setUseSystemKeyboard(useSystemKeyboard);
+    }
+
+    public void setUseSystemKeyboard(boolean useSystemKeyboard) {
+        if (useSystemKeyboard) {
+            setRawInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
+
+            setOnLongClickListener(null);
+            setOnFocusChangeListener(null);
+            setOnClickListener(null);
+            // Disable standard keyboard hard way
+            setOnTouchListener(null);
+        } else {
+            setInputType(InputType.TYPE_NULL);
+
+            setOnLongClickListener(longClickListener);
+            setOnFocusChangeListener(focusChangeListener);
+            setOnClickListener(clickListener);
+            // Disable standard keyboard hard way
+            setOnTouchListener(touchListener);
+        }
+    }
+
+    public void addFilter(InputFilter filter) {
+        InputFilter[] oldFilters = getFilters();
+        InputFilter[] newFilters = new InputFilter[oldFilters.length + 1];
+        System.arraycopy(oldFilters, 0, newFilters, 0, oldFilters.length);
+        newFilters[oldFilters.length] = filter;
+        setFilters(newFilters);
+    }
+
+    public void addFilters(InputFilter[] filters) {
+        InputFilter[] oldFilters = getFilters();
+        InputFilter[] newFilters = new InputFilter[oldFilters.length + filters.length];
+        System.arraycopy(oldFilters, 0, newFilters, 0, oldFilters.length);
+        System.arraycopy(filters, 0, newFilters, oldFilters.length, filters.length);
+        setFilters(newFilters);
     }
 
     @Override
