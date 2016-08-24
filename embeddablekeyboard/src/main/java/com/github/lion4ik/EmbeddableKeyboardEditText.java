@@ -2,7 +2,6 @@ package com.github.lion4ik;
 
 import android.annotation.TargetApi;
 import android.content.Context;
-import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.os.Build;
 import android.os.Parcel;
@@ -11,7 +10,6 @@ import android.support.annotation.NonNull;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.util.AttributeSet;
-import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
@@ -83,7 +81,7 @@ public class EmbeddableKeyboardEditText extends EditText {
             }
         }
 
-        setInputType(InputType.TYPE_NULL);
+        setRawInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
         setTextIsSelectable(true);
         setFocusableInTouchMode(true);
 
@@ -135,26 +133,21 @@ public class EmbeddableKeyboardEditText extends EditText {
     }
 
     public void setUseSystemKeyboard(boolean useSystemKeyboard) {
+        this.useSystemKeyboard = useSystemKeyboard;
         if (useSystemKeyboard) {
-            setRawInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
-
             setOnLongClickListener(null);
             setOnFocusChangeListener(null);
             setOnClickListener(null);
-            // Disable standard keyboard hard way
             setOnTouchListener(null);
         } else {
-            setInputType(InputType.TYPE_NULL);
-
             setOnLongClickListener(longClickListener);
             setOnFocusChangeListener(focusChangeListener);
             setOnClickListener(clickListener);
-            // Disable standard keyboard hard way
             setOnTouchListener(touchListener);
         }
     }
 
-    public void addFilter(InputFilter filter) {
+    public void addFilterToEnd(InputFilter filter) {
         InputFilter[] oldFilters = getFilters();
         InputFilter[] newFilters = new InputFilter[oldFilters.length + 1];
         System.arraycopy(oldFilters, 0, newFilters, 0, oldFilters.length);
@@ -162,11 +155,27 @@ public class EmbeddableKeyboardEditText extends EditText {
         setFilters(newFilters);
     }
 
-    public void addFilters(InputFilter[] filters) {
+    public void addFilterAtStart(InputFilter filter) {
+        InputFilter[] oldFilters = getFilters();
+        InputFilter[] newFilters = new InputFilter[oldFilters.length + 1];
+        newFilters[0] = filter;
+        System.arraycopy(oldFilters, 1, newFilters, 0, oldFilters.length);
+        setFilters(newFilters);
+    }
+
+    public void addFiltersToEnd(InputFilter[] filters) {
         InputFilter[] oldFilters = getFilters();
         InputFilter[] newFilters = new InputFilter[oldFilters.length + filters.length];
         System.arraycopy(oldFilters, 0, newFilters, 0, oldFilters.length);
         System.arraycopy(filters, 0, newFilters, oldFilters.length, filters.length);
+        setFilters(newFilters);
+    }
+
+    public void addFiltersAtStart(InputFilter[] filters) {
+        InputFilter[] oldFilters = getFilters();
+        InputFilter[] newFilters = new InputFilter[oldFilters.length + filters.length];
+        System.arraycopy(filters, 0, newFilters, 0, filters.length);
+        System.arraycopy(oldFilters, 0, newFilters, filters.length, oldFilters.length);
         setFilters(newFilters);
     }
 
@@ -189,6 +198,7 @@ public class EmbeddableKeyboardEditText extends EditText {
         final Parcelable superState = super.onSaveInstanceState();
         SavedState ss = new SavedState(superState);
         ss.keyboardId = keyboardResId;
+        ss.useSystemKeyboard = useSystemKeyboard;
         return ss;
     }
 
@@ -197,6 +207,8 @@ public class EmbeddableKeyboardEditText extends EditText {
         SavedState ss = (SavedState) state;
         super.onRestoreInstanceState(ss.getSuperState());
         keyboardResId = ss.keyboardId;
+        useSystemKeyboard = ss.useSystemKeyboard;
+        setUseSystemKeyboard(useSystemKeyboard);
     }
 
     public EmbeddableKeyboardEditText(Context context) {
@@ -231,12 +243,12 @@ public class EmbeddableKeyboardEditText extends EditText {
 
     public interface InputConnection {
         void onKeyPressed(char symbol);
-
         void onBackspacePressed();
     }
 
     private static class SavedState extends BaseSavedState {
         int keyboardId;
+        boolean useSystemKeyboard;
 
         SavedState(Parcelable superState) {
             super(superState);
@@ -245,12 +257,14 @@ public class EmbeddableKeyboardEditText extends EditText {
         private SavedState(Parcel in) {
             super(in);
             keyboardId = in.readInt();
+            useSystemKeyboard = in.readInt() == 1;
         }
 
         @Override
         public void writeToParcel(Parcel out, int flags) {
             super.writeToParcel(out, flags);
             out.writeInt(keyboardId);
+            out.writeInt(useSystemKeyboard ? 1 : 0);
         }
 
         public static final Parcelable.Creator<SavedState> CREATOR =

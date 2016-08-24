@@ -8,6 +8,10 @@ import android.support.annotation.NonNull;
  */
 public class BackspaceTimer extends CountDownTimer {
     private TimerAction timerAction;
+    private boolean isInProgress = false;
+    private int firstActionSkip = 0;
+
+    private static final int SKIP_ON_TICK_TIMES = 5;
 
     public BackspaceTimer(long countDownInterval, @NonNull TimerAction timerAction) {
         super(Integer.MAX_VALUE, countDownInterval);
@@ -16,12 +20,32 @@ public class BackspaceTimer extends CountDownTimer {
 
     @Override
     public void onTick(long l) {
-        timerAction.onTick(l);
+        if(firstActionSkip == 0){
+            timerAction.onTick(l);
+            firstActionSkip++;
+            return;
+        }
+
+        if (isInProgress && firstActionSkip == SKIP_ON_TICK_TIMES) {
+            timerAction.onTick(l);
+        } else {
+            if(!isInProgress){
+                isInProgress = true;
+                firstActionSkip++;
+                return;
+            }
+
+            if(firstActionSkip < SKIP_ON_TICK_TIMES){
+                firstActionSkip++;
+            }
+        }
+
     }
 
     @Override
     public void onFinish() {
-        //empty
+        firstActionSkip = 0;
+        isInProgress = false;
     }
 
     public interface TimerAction{

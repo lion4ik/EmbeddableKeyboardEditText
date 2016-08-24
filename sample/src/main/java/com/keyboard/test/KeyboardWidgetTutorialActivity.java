@@ -47,8 +47,9 @@ public class KeyboardWidgetTutorialActivity extends Activity {
         CheckBox checkBoxSystemKeyboard = (CheckBox) findViewById(R.id.cbSystemKeyboard);
 
         final KeyboardFrame keyboardFrame = (KeyboardFrame) findViewById(R.id.keyboard);
-        mTargetView.addFilter(new InputFilter.LengthFilter(14));
+        mTargetView.addFiltersAtStart(new InputFilter[]{new InputFilter.LengthFilter(14), new InputFilter.AllCaps()});
         mTargetView.setUseSystemKeyboard(true);
+        mTargetView.setHint("lolo");
         btnShowHideKeyboard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -65,9 +66,11 @@ public class KeyboardWidgetTutorialActivity extends Activity {
                 mTargetView.setUseSystemKeyboard(isChecked);
                 if (isChecked) {
                     keyboardFrame.hideKeyboard();
+//                    mTargetView.setFilters(new InputFilter[]{new InputFilter.LengthFilter(14), new InputFilter.AllCaps()});
                     inputManager.showSoftInput(mTargetView, 0);
                 } else {
                     keyboardFrame.showKeyboard();
+//                    mTargetView.addFilterAtStart(new InputFilter.LengthFilter(14));
                     inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
                 }
             }

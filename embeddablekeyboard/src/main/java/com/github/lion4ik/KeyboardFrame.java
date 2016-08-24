@@ -154,9 +154,11 @@ public abstract class KeyboardFrame extends FrameLayout implements EmbeddableKey
                             break;
                         case MotionEvent.ACTION_UP:
                             timer.cancel();
+                            timer.onFinish();
                             break;
                         case MotionEvent.ACTION_CANCEL:
                             timer.cancel();
+                            timer.onFinish();
                             break;
                     }
                     return false;
