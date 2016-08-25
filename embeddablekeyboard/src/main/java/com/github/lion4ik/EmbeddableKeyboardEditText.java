@@ -23,7 +23,6 @@ public class EmbeddableKeyboardEditText extends EditText {
     private int keyboardResId;
     private boolean useSystemKeyboard;
 
-    private OnFocusChangeListener focusChangeListener;
     private OnLongClickListener longClickListener;
     private OnClickListener clickListener;
     private OnTouchListener touchListener;
@@ -93,19 +92,6 @@ public class EmbeddableKeyboardEditText extends EditText {
             }
         };
 
-        focusChangeListener = new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (keyboard != null) {
-                    if (hasFocus) {
-                        keyboard.showKeyboard();
-                    } else {
-                        keyboard.hideKeyboard();
-                    }
-                }
-            }
-        };
-
         clickListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -136,12 +122,10 @@ public class EmbeddableKeyboardEditText extends EditText {
         this.useSystemKeyboard = useSystemKeyboard;
         if (useSystemKeyboard) {
             setOnLongClickListener(null);
-            setOnFocusChangeListener(null);
             setOnClickListener(null);
             setOnTouchListener(null);
         } else {
             setOnLongClickListener(longClickListener);
-            setOnFocusChangeListener(focusChangeListener);
             setOnClickListener(clickListener);
             setOnTouchListener(touchListener);
         }
