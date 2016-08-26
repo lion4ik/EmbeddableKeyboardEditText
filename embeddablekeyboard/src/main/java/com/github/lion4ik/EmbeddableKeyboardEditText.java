@@ -22,6 +22,7 @@ public class EmbeddableKeyboardEditText extends EditText {
     private InputConnection keyboardConnection;
     private int keyboardResId;
     private boolean useSystemKeyboard;
+    private boolean useTouchBlocker;
 
     private OnLongClickListener longClickListener;
     private OnClickListener clickListener;
@@ -96,7 +97,7 @@ public class EmbeddableKeyboardEditText extends EditText {
             @Override
             public void onClick(View v) {
                 setCursorVisible(true);
-                if (keyboard != null) {
+                if (keyboard != null && getVisibility() != View.VISIBLE) {
                     keyboard.showKeyboard();
                 }
             }
@@ -109,7 +110,9 @@ public class EmbeddableKeyboardEditText extends EditText {
                 int inType = edittext.getInputType();       // Backup the input type
                 edittext.setInputType(InputType.TYPE_NULL); // Disable standard keyboard
                 edittext.onTouchEvent(event);               // Call native handler
-                keyboard.showKeyboard();
+                if (getVisibility() != View.VISIBLE) {
+                    keyboard.showKeyboard();
+                }
                 edittext.setInputType(inType);              // Restore input type
                 return true; // Consume touch event
             }
@@ -123,12 +126,20 @@ public class EmbeddableKeyboardEditText extends EditText {
         if (useSystemKeyboard) {
             setOnLongClickListener(null);
             setOnClickListener(null);
-            setOnTouchListener(null);
+            if (useTouchBlocker) {
+                setOnTouchListener(null);
+            }
         } else {
             setOnLongClickListener(longClickListener);
             setOnClickListener(clickListener);
-            setOnTouchListener(touchListener);
+            if (useTouchBlocker) {
+                setOnTouchListener(touchListener);
+            }
         }
+    }
+
+    public void setUseTouchBlocker(boolean useTouchBlocker) {
+        this.useTouchBlocker = useTouchBlocker;
     }
 
     public void addFilterToEnd(InputFilter filter) {
@@ -183,6 +194,7 @@ public class EmbeddableKeyboardEditText extends EditText {
         SavedState ss = new SavedState(superState);
         ss.keyboardId = keyboardResId;
         ss.useSystemKeyboard = useSystemKeyboard;
+        ss.useTouchBlocker = useTouchBlocker;
         return ss;
     }
 
@@ -192,6 +204,7 @@ public class EmbeddableKeyboardEditText extends EditText {
         super.onRestoreInstanceState(ss.getSuperState());
         keyboardResId = ss.keyboardId;
         useSystemKeyboard = ss.useSystemKeyboard;
+        useTouchBlocker = ss.useTouchBlocker;
         setUseSystemKeyboard(useSystemKeyboard);
     }
 
@@ -233,6 +246,7 @@ public class EmbeddableKeyboardEditText extends EditText {
     private static class SavedState extends BaseSavedState {
         int keyboardId;
         boolean useSystemKeyboard;
+        boolean useTouchBlocker;
 
         SavedState(Parcelable superState) {
             super(superState);
@@ -242,6 +256,7 @@ public class EmbeddableKeyboardEditText extends EditText {
             super(in);
             keyboardId = in.readInt();
             useSystemKeyboard = in.readInt() == 1;
+            useTouchBlocker = in.readInt() == 1;
         }
 
         @Override
@@ -249,6 +264,7 @@ public class EmbeddableKeyboardEditText extends EditText {
             super.writeToParcel(out, flags);
             out.writeInt(keyboardId);
             out.writeInt(useSystemKeyboard ? 1 : 0);
+            out.writeInt(useTouchBlocker ? 1 : 0);
         }
 
         public static final Parcelable.Creator<SavedState> CREATOR =
